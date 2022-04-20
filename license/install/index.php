@@ -1,6 +1,8 @@
 <?php
-    require_once '../includes/lb_helper.php'; // Include LicenseBox external/client api helper file
-    $api = new LicenseBoxAPI(); // Initialize a new LicenseBoxAPI object
+require_once '../includes/lb_helper.php'; // Include LicenseBox external/client api helper file
+$api = new LicenseBoxAPI(); // Initialize a new LicenseBoxAPI object
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 ?>
 
 <!DOCTYPE html>
@@ -14,40 +16,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <style>
-    #cover-spin {
-    position:fixed;
-    width:100%;
-    left:0;right:0;top:0;bottom:0;
-    background-color: rgba(255,255,255,0.7);
-    z-index:9999;
-    display:none;
-    }
+        #cover-spin {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            display: none;
+        }
 
-    @-webkit-keyframes spin {
-        from {-webkit-transform:rotate(0deg);}
-        to {-webkit-transform:rotate(360deg);}
-    }
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
 
-    @keyframes spin {
-        from {transform:rotate(0deg);}
-        to {transform:rotate(360deg);}
-    }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
 
-    #cover-spin::after {
-        content:'';
-        display:block;
-        position:absolute;
-        left:48%;top:40%;
-        width:40px;height:40px;
-        border-style:solid;
-        border-color:black;
-        border-top-color:transparent;
-        border-width: 4px;
-        border-radius:50%;
-        -webkit-animation: spin .8s linear infinite;
-        animation: spin .8s linear infinite;
-    }
-</style>
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #cover-spin::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 48%;
+            top: 40%;
+            width: 40px;
+            height: 40px;
+            border-style: solid;
+            border-color: black;
+            border-top-color: transparent;
+            border-width: 4px;
+            border-radius: 50%;
+            -webkit-animation: spin .8s linear infinite;
+            animation: spin .8s linear infinite;
+        }
+    </style>
 </head>
 
 <body>
@@ -111,9 +128,9 @@
                                     <a href="index.php?step=0" class="button is-link">Next</a>
                                 <?php } ?>
                             </div>
-                            <?php
-                                    break;
-                                case "0": ?>
+                        <?php
+                            break;
+                        case "0": ?>
                             <div class="tabs is-fullwidth">
                                 <ul>
                                     <li>
@@ -139,20 +156,19 @@
                                 </ul>
                             </div>
                             <?php
-                                    $license_code = null;
-                                    $client_name = null;
-                                    if (!empty($_POST['license']) && !empty($_POST['client']))
-                                    {
-                                        $license_code = strip_tags(trim($_POST["license"]));
-                                        $client_name = strip_tags(trim($_POST["client"]));
-                                        /* Once we have the license code and client's name we can use LicenseBoxAPI's activate_license() function for activating/installing the license, if the third parameter is empty a local license file will be created which can be used for background license checks. */
-                                        $activate_response = $api->activate_license($license_code, $client_name);
-                                        if (empty($activate_response)) {
-                                            $msg = 'Server is unavailable.';
-                                        } else {
-                                            $msg = $activate_response['message'];
-                                        }
-                                        if ($activate_response['status'] != true) { ?>
+                            $license_code = null;
+                            $client_name = null;
+                            if (!empty($_POST['license']) && !empty($_POST['client'])) {
+                                $license_code = strip_tags(trim($_POST["license"]));
+                                $client_name = strip_tags(trim($_POST["client"]));
+                                /* Once we have the license code and client's name we can use LicenseBoxAPI's activate_license() function for activating/installing the license, if the third parameter is empty a local license file will be created which can be used for background license checks. */
+                                $activate_response = $api->activate_license($license_code, $client_name);
+                                if (empty($activate_response)) {
+                                    $msg = 'Server is unavailable.';
+                                } else {
+                                    $msg = $activate_response['message'];
+                                }
+                                if ($activate_response['status'] != true) { ?>
                                     <form action="index.php?step=0" method="POST">
                                         <div class="notification is-danger"><?php echo ucfirst($msg); ?></div>
                                         <div class="field">
@@ -243,7 +259,8 @@
                                             $con = @mysqli_connect($db_host, $db_user, $db_pass, $db_name);
                                             if (mysqli_connect_errno()) { ?>
                                         <form action="index.php?step=1" method="POST">
-                                            <div class='notification is-danger'>Failed to connect to MySQL: <?php echo mysqli_connect_error(); ?></div>
+                                            <div class='notification is-danger'>Failed to connect to MySQL:
+                                                <?php echo mysqli_connect_error(); ?></div>
                                             <input type="hidden" name="lcscs" id="lcscs" value="<?php echo $valid; ?>">
                                             <input type="hidden" name="license_code" id="license_code" value="<?php echo $license_code; ?>">
                                             <input type="hidden" name="client_name" id="client_name" value="<?php echo $client_name; ?>">
@@ -428,8 +445,7 @@
         });
     });
 
-    jQuery(document).on("click", "#admin-login-btn", function()
-    {
+    jQuery(document).on("click", "#admin-login-btn", function() {
         $('#cover-spin').show(0);
         url = window.location.origin + window.location.pathname
         url = url.slice(0, -1)
@@ -443,25 +459,21 @@
             cache: false,
             contentType: false,
             processData: false,
-            success: function(result)
-            {
+            success: function(result) {
                 // if (result.success == true)
                 // {
                 //     window.location.replace(result.data);
                 // }
-                $.ajax(
-                {
+                $.ajax({
                     type: "POST",
                     url: name + "public/saveAdminData",
                     data: formData,
                     cache: false,
                     contentType: false,
                     processData: false,
-                    success: function(result)
-                    {
+                    success: function(result) {
                         console.log('result', result)
-                        if (result.success == true)
-                        {
+                        if (result.success == true) {
                             window.location.replace(result.data);
                         }
                     },
