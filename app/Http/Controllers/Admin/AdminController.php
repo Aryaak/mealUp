@@ -54,15 +54,18 @@ class AdminController extends Controller
                 $data = GeneralSetting::find(1);
                 $data->license_verify = 1;
                 $data->save();
-                $api = new LicenseBoxAPI();
-                $res = $api->verify_license();
-                if ($res['status'] != true) {
-                    $data->license_verify = 0;
-                    $data->save();
-                } else {
-                    $data->license_verify = 1;
-                    $data->save();
-                }
+                // $api = new LicenseBoxAPI();
+                // $res = $api->verify_license();
+                // if ($res['status'] != true) {
+                //     $data->license_verify = 0;
+                //     $data->save();
+                // } else {
+                //     $data->license_verify = 1;
+                //     $data->save();
+                // }
+
+                $data->license_verify = 1;
+                $data->save();
                 return redirect('admin/home');
             }
         }
