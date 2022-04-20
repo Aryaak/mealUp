@@ -125,7 +125,7 @@ ini_set('display_errors', '1');
                                 <?php if ($errors == true) { ?>
                                     <a href="javascript:void(0);" class="button is-link" disabled>Next</a>
                                 <?php } else { ?>
-                                    <a href="index.php?step=0" class="button is-link">Next</a>
+                                    <a href="index.php?step=1" class="button is-link">Next</a>
                                 <?php } ?>
                             </div>
                         <?php

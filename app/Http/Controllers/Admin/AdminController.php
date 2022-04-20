@@ -31,12 +31,9 @@ class AdminController extends Controller
 {
     public function showLogin()
     {
-        if (env('DB_DATABASE'))
-        {
+        if (env('DB_DATABASE')) {
             return view('auth.login');
-        }
-        else
-        {
+        } else {
             return view('first_page');
         }
     }
@@ -47,28 +44,22 @@ class AdminController extends Controller
             'email_id' => 'bail|required|email',
             'password' => 'bail|required',
         ]);
-        if(Auth::attempt(['email_id' => request('email_id'), 'password' => request('password')]))
-        {
+        if (Auth::attempt(['email_id' => request('email_id'), 'password' => request('password')])) {
             $user = Auth::user()->load('roles');
-            if ($user->roles->contains('title', 'user') == true)
-            {
+            if ($user->roles->contains('title', 'user') == true) {
                 Auth::logout();
                 return redirect()->back()->withErrors('Only admin can login');
             }
-            if ($user->roles->contains('title', 'admin'))
-            {
+            if ($user->roles->contains('title', 'admin')) {
                 $data = GeneralSetting::find(1);
                 $data->license_verify = 1;
                 $data->save();
                 $api = new LicenseBoxAPI();
                 $res = $api->verify_license();
-                if ($res['status'] != true)
-                {
+                if ($res['status'] != true) {
                     $data->license_verify = 0;
                     $data->save();
-                }
-                else
-                {
+                } else {
                     $data->license_verify = 1;
                     $data->save();
                 }
@@ -82,55 +73,49 @@ class AdminController extends Controller
     {
         abort_if(Gate::denies('admin_profile_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $admin = Auth::user();
-        return view('admin.admin setting.admin_profile',compact('admin'));
+        return view('admin.admin setting.admin_profile', compact('admin'));
     }
 
     public function update_admin_profile(Request $request)
     {
         $data = $request->all();
         $id = User::find($data['id']);
-        if ($file = $request->hasfile('image'))
-        {
+        if ($file = $request->hasfile('image')) {
             $request->validate(
-            ['image' => 'max:1000'],
-            [
-                'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
-            ]);
+                ['image' => 'max:1000'],
+                [
+                    'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
+                ]
+            );
             (new CustomController)->deleteImage(DB::table('users')->where('id', $data['id'])->value('image'));
             $data['image'] = (new CustomController)->uploadImage($request->image);
         }
         $id->update($data);
-        return redirect()->back()->with('msg','Admin profile update successfully..!!');
+        return redirect()->back()->with('msg', 'Admin profile update successfully..!!');
     }
 
     public function admin_forgot_password(Request $request)
     {
-        $user = User::where('email_id',$request->email)->first();
+        $user = User::where('email_id', $request->email)->first();
         $password = mt_rand(100000, 999999);
-        if($user)
-        {
-            $passwordTemplate = NotificationTemplate::where('title','forgot password')->first();
+        if ($user) {
+            $passwordTemplate = NotificationTemplate::where('title', 'forgot password')->first();
             $mail_content = $passwordTemplate->mail_content;
             $detail['password'] = $password;
             $detail['user_name'] = $user->name;
             $data = ["{password}", "{user_name}"];
-            if($user)
-            {
+            if ($user) {
                 $user->password = Hash::make($password);
                 $user->save();
                 $message1 = str_replace($data, $detail, $mail_content);
-                try
-                {
+                try {
                     Mail::to($user->email_id)->send(new AdminForgotPassword($message1));
+                } catch (\Throwable $th) {
                 }
-                catch (\Throwable $th)
-                {}
-                return redirect()->back()->with('msg','Your Password Send Into Your Email..!!');
+                return redirect()->back()->with('msg', 'Your Password Send Into Your Email..!!');
             }
-        }
-        else
-        {
-            return redirect()->back()->with('errormsg','Ooops.. User Not Found..!!');
+        } else {
+            return redirect()->back()->with('errormsg', 'Ooops.. User Not Found..!!');
         }
     }
 
@@ -143,15 +128,12 @@ class AdminController extends Controller
         ]);
         $data = $request->all();
         $id = auth()->user();
-        if(Hash::check($data['old_password'], $id->password) == true)
-        {
+        if (Hash::check($data['old_password'], $id->password) == true) {
             $id->password = Hash::make($data['password']);
             $id->save();
-            return redirect('admin/home')->with('msg','Password Update Successfully...!!');
-        }
-        else
-        {
-            return redirect()->back()->with('message','Old password does not match');
+            return redirect('admin/home')->with('msg', 'Password Update Successfully...!!');
+        } else {
+            return redirect()->back()->with('message', 'Old password does not match');
         }
     }
 
@@ -164,14 +146,14 @@ class AdminController extends Controller
     {
         abort_if(Gate::denies('feedback_support'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $feedbacks = Feedback::get();
-        return view('admin.admin setting.feedback',compact('feedbacks'));
+        return view('admin.admin setting.feedback', compact('feedbacks'));
     }
 
     public function change_language($name)
     {
         App::setLocale($name);
         session()->put('locale', $name);
-        $direction = Language::where('name',$name)->first()->direction;
+        $direction = Language::where('name', $name)->first()->direction;
         session()->put('direction', $direction);
         return redirect()->back();
     }
@@ -183,8 +165,7 @@ class AdminController extends Controller
         $data['DB_USERNAME'] = $request->db_user;
         $data['DB_PASSWORD'] = $request->db_pass;
         $envFile = app()->environmentFilePath();
-        if ($envFile)
-        {
+        if ($envFile) {
             $str = file_get_contents($envFile);
             if (count($data) > 0) {
                 foreach ($data as $envKey => $envValue) {
@@ -211,13 +192,13 @@ class AdminController extends Controller
 
     public function saveAdminData(Request $request)
     {
-        GeneralSetting::find(1)->update(['license_code' => $request->license_code , 'client_name' => $request->client_name , 'license_verify' => 1]);
+        GeneralSetting::find(1)->update(['license_code' => $request->license_code, 'client_name' => $request->client_name, 'license_verify' => 1]);
         return response()->json(['data' => url('/'), 'success' => true], 200);
     }
 
     public function download_pdf($file_name)
     {
-        $pathToFile = public_path(). "/sample_excel"."/".$file_name;
+        $pathToFile = public_path() . "/sample_excel" . "/" . $file_name;
         $name = $file_name;
         $headers = array('Content-Type: application/pdf',);
         return response()->download($pathToFile, $name, $headers);
