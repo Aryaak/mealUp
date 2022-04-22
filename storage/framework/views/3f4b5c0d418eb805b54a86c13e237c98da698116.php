@@ -5,24 +5,24 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
 
-    @php
+    <?php
         $title = App\Models\GeneralSetting::find(1)->business_name;
         $favicon = App\Models\GeneralSetting::find(1)->favicon;
-    @endphp
+    ?>
 
-    <title>{{ $title }} | @yield('title','Admin login')</title>
+    <title><?php echo e($title); ?> | <?php echo $__env->yieldContent('title','Admin login'); ?></title>
 
-    <link rel="icon" href="{{ url('images/upload/'.$favicon) }}" type="image/png">
+    <link rel="icon" href="<?php echo e(url('images/upload/'.$favicon)); ?>" type="image/png">
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-        @php
+        <?php
             $favicon = App\Models\GeneralSetting::find(1)->company_favicon;
             $icon = App\Models\GeneralSetting::find(1)->company_black_logo;
             $color = App\Models\GeneralSetting::find(1)->site_color;
-        @endphp
+        ?>
         <style>
             :root {
                 --site_color: <?php echo $color; ?>;
@@ -31,19 +31,21 @@
         </style>
 
     <!-- Template CSS -->
-    <link rel="stylesheet" href="{{ url('css/style.css') }}">
-    <link rel="stylesheet" href="{{ url('css/components.css')}}">
+    
+    <link rel="stylesheet" href="<?php echo e(url('public/css/style.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(url('public/css/components.css')); ?>">
 </head>
 
 <body>
     <div id="app">
         <section class="section">
             <div class="d-flex flex-wrap align-items-stretch">
-                <div class="col-lg-8 col-12 col-md-6 order-lg-1 order-1 min-vh-100 background-walk-y overlay-gradient-bottom" data-background="{{ url('images/1.png') }}" style="background-color: #23110f">
+                
+                <div class="col-lg-8 col-12 col-md-6 order-lg-1 order-1 min-vh-100 background-walk-y overlay-gradient-bottom" data-background="<?php echo e(url('public/images/1.png')); ?>" style="background-color: #23110f">
                     <div class="absolute-bottom-left index-2">
                         <div class="text-light p-5 pb-2">
                             <div class="mb-5 pb-3">
-                                <h1 class="mb-2 display-4 font-weight-bold">{{__("welcome admin...!!")}}</h1>
+                                <h1 class="mb-2 display-4 font-weight-bold"><?php echo e(__("welcome admin...!!")); ?></h1>
                             </div>
                         </div>
                     </div>
@@ -51,32 +53,35 @@
                 <div class="col-lg-4 col-12 pt-5 col-md-6 order-lg-2 min-vh-100 order-2 bg-white">
                     <div class="p-4 m-3">
                         <div class="w-100 text-center">
-                            <img src="{{ url('images/upload/'.$icon) }}" alt="logo" width="80" class="shadow-light rounded-circle mb-5 mt-2">
+                            
+                            <img src="<?php echo e(url('public/images/upload/'.$icon)); ?>" alt="logo" width="80" class="shadow-light rounded-circle mb-5 mt-2">
                         </div>
-                        <h4 class="text-dark mb-5 font-weight-normal">{{__('Welcome to ')}}<span class="font-weight-bold">{{__('FoodDot')}}</span>
+                        <h4 class="text-dark mb-5 font-weight-normal"><?php echo e(__('Welcome to ')); ?><span class="font-weight-bold"><?php echo e(__('FoodDot')); ?></span>
                         </h4>
-                        @if ($errors->any())
+                        <?php if($errors->any()): ?>
                         <div class="alert alert-primary alert-dismissible show fade">
                             <div class="alert-body">
                               <button class="close" data-dismiss="alert">
                                 <span>×</span>
                               </button>
-                              @foreach ($errors->all() as $item)
-                                {{ $item }}
-                              @endforeach
+                              <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php echo e($item); ?>
+
+                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                           </div>
-                        @endif
-                        <form method="POST" action="{{ url('confirm_login') }}">
-                            @csrf
+                        <?php endif; ?>
+                        
+                        <form action="<?php echo e(url('/confirm_login')); ?>" method="post">
+                            <?php echo csrf_field(); ?>
                             <div class="form-group">
-                                <label for="email">{{__('Email')}}</label>
+                                <label for="email"><?php echo e(__('Email')); ?></label>
                                 <input id="email" type="email" class="form-control" name="email_id" tabindex="1" required autofocus>
                             </div>
 
                             <div class="form-group">
                                 <div class="d-block">
-                                    <label for="password" class="control-label">{{__('Password')}}</label>
+                                    <label for="password" class="control-label"><?php echo e(__('Password')); ?></label>
                                     <div class="float-right">
                                     </div>
                                 </div>
@@ -85,18 +90,20 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                                    {{__('Login')}}
+                                <button type="submit" class="btn btn-warning btn-lg btn-block" tabindex="4">
+                                    <?php echo e(__('Login')); ?>
+
                                 </button>
                             </div>
 
                             <div class="form-group text-center">
-                                <a href="{{ url('admin/forgot_password') }}" class="text-small text-center">
-                                    {{__('Forgot Password?')}}
+                                <a href="<?php echo e(url('admin/forgot_password')); ?>" class="text-small text-center">
+                                    <?php echo e(__('Forgot Password?')); ?>
+
                                 </a>
                             </div>
                             <div class="form-group text-center">
-                                <a href="{{ url('vendor/login') }}">{{__('Vendor Login')}}</a>
+                                <a href="<?php echo e(url('vendor/login')); ?>"><?php echo e(__('Vendor Login')); ?></a>
                             </div>
                         </form>
                     </div>
@@ -111,15 +118,18 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src="{{ url('js/stisla.js') }}"></script>
+    
+    <script src="<?php echo e(url('public/js/stisla.js')); ?>"></script>
 
     <!-- JS Libraies -->
 
     <!-- Template JS File -->
-    <script src="{{ url('js/scripts.js') }}"></script>
-    <script src="{{ url('js/custom.js') }}"></script>
+    
+    <script src="<?php echo e(url('public/js/scripts.js')); ?>"></script>
+    <script src="<?php echo e(url('public/js/custom.js')); ?>"></script>
 
     <!-- Page Specific JS File -->
 </body>
 
 </html>
+<?php /**PATH C:\xampp\htdocs\fooddot\mealUp\resources\views/auth/login.blade.php ENDPATH**/ ?>

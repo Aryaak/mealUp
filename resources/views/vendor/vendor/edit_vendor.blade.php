@@ -38,7 +38,7 @@
                             <div class="col-md-6 mb-5">
                                 <label for="Image">{{__('Vendor logo')}}</label>
                                 <div class="logoContainer">
-                                    <img id="licence_doc" src="{{ $vendor->vendor_logo }}" width="200" height="182" class="rounded-lg p-2">
+                                    <img id="licence_doc" src="{{ $vendor->vendor_logo }}" width="100" class="rounded-lg p-2">
                                 </div>
                                 <div class="fileContainer">
                                     <span>{{__('Image')}}</span>

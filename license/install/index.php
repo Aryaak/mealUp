@@ -77,7 +77,7 @@ ini_set('display_errors', '1');
         <div class="section">
             <div class="column is-6 is-offset-3">
                 <center>
-                    <h1 class="title" style="padding-top: 20px">MealUp</h1><br>
+                    <h1 class="title" style="padding-top: 20px">FoodDot</h1><br>
                 </center>
                 <div class="box">
                     <?php

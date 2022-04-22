@@ -8,11 +8,11 @@
                     @endphp
                 @endif
                 <a href="{{ url('vendor/vendor_home')}}">
-                    <img src="{{ $vendor->vendor_logo }}" class="rounded" width="150" height="150" alt="">
+                    <img src="{{ $vendor->vendor_logo }}" class="rounded" width="100" alt="" style="width: 100px !important;">
                 </a>
                 <div class="sidebar-brand sidebar-brand-sm">
                     <a href="{{ url('vendor/vendor_home') }}">
-                        <img src="{{ $vendor->vendor_logo }}" class="rounded" width="20" height="20" alt="">
+                        <img src="{{ $vendor->vendor_logo }}" class="rounded" width="20" alt="" style="width: 100px !important;">
                     </a>
                 </div>
             @endif
@@ -24,7 +24,7 @@
             @if(Auth::user()->load('roles')->roles->contains('title', 'admin'))
                 {{-- <div class="sidebar-brand"> --}}
                     <a href="{{ url('admin/home')}}">
-                        <img src="{{ url('images/upload/'.$icon)}}" width="150" height="150">
+                        <img src="{{ url('images/upload/'.$icon)}}" width="100" class="mt-4">
                     </a>
                 {{-- </div> --}}
                 <div class="sidebar-brand sidebar-brand-sm">
@@ -39,7 +39,7 @@
             @can('admin_dashboard')
                 <li class="{{ $activePage == 'home' ? 'active' : '' }}">
                     <a class="nav-link" href="{{ url('admin/home') }}">
-                        <i class="fas fa-columns text-primary"></i>
+                        <i class="fas fa-columns text-secondary"></i>
                         <span>{{__('Dashboard')}}</span>
                     </a>
                 </li>
