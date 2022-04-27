@@ -55,8 +55,8 @@
                         <div class="col-md-6 mb-5">
                             <label for="Image">{{__('Vendor logo')}}</label>
                             <div class="logoContainer">
-                                <img id="licence_doc" src="{{ $vendor->vendor_logo }}" width="180" height="150">
-                            </div>
+                                <img id="licence_doc" src="{{ $vendor->vendor_logo }}" width="100">
+                            </div>z
                             <div class="fileContainer">
                                 <span>{{__('Image')}}</span>
                                 <input type="file" name="vendor_logo" data-id="edit" value="Choose File" id="previewlicence_doc" accept=".png, .jpg, .jpeg, .svg">

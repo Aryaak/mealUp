@@ -53,7 +53,7 @@
                         <div class="w-100 text-center">
                             <img src="<?php echo e(url('images/upload/'.$icon)); ?>" alt="logo" width="80" class="shadow-light rounded-circle mb-5 mt-2">
                         </div>
-                        <h4 class="text-dark mb-5 font-weight-normal"><?php echo e(__('Welcome to ')); ?><span class="font-weight-bold"><?php echo e(__('MealUp')); ?></span>
+                        <h4 class="text-dark mb-5 font-weight-normal"><?php echo e(__('Welcome to ')); ?><span class="font-weight-bold"><?php echo e(__('FoodDot')); ?></span>
                         </h4>
                         <?php if($errors->any()): ?>
                         <div class="alert alert-primary alert-dismissible show fade">

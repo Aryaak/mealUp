@@ -288,8 +288,8 @@
         <section id="banner">
             <div class="inner">
                 <header>
-                    <h1>Welcome to MealUp</h1>
-                    <p>Thank you for purchasing mealUp<br />get your installation key and install database</p>
+                    <h1>Welcome to FoodDot</h1>
+                    <p>Thank you for purchasing FoodDot<br />get your installation key and install database</p>
                 </header>
                 <a href="<?php echo e(url('license/install')); ?>" class="button big scrolly">Installer</a>
             </div>

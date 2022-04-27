@@ -94,13 +94,13 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                                <button type="submit" class="btn btn-warning btn-lg btn-block" tabindex="4">
                                     {{__('Submit')}}
                                 </button>
                             </div>
 
                             <div class="form-group text-center">
-                                <a href="{{ url('vendor/login') }}">{{__('Login')}}</a>
+                                <a class="text-black-50" href="{{ url('vendor/login') }}">{{__('Login')}}</a>
                             </div>
                         </form>
                     </div>
